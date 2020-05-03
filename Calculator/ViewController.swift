@@ -1,60 +1,71 @@
-//
-//  ViewController.swift
-//  Calculator
-//
-//  Created by Angela Yu on 10/09/2019.
-//  Copyright © 2019 London App Brewery. All rights reserved.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
     
-    let calculatorBrain = CalculatorBrain()
-    
-    private var storedValue : String = ""
+    private var typedNumber : String = ""
+    private var storedNumber : Double?
+    private var storedAction : String?
     
     @IBOutlet weak var displayLabel: UILabel!
-    
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
-        displayLabel.text =  calculatorBrain.calculate(button: sender.currentTitle, displayText: displayLabel.text!)
+        typedNumber = ""
         
-//        guard let numberOnDisplay = Double(displayLabel.text!) else {
-//            fatalError("couldn't convert display label string to Double")
-//        }
-//        
-//        if sender.currentTitle == "+/-" {
-//            
-//            displayLabel.text = String(numberOnDisplay * -1)
-//        }
-//        
-//        if sender.currentTitle == "AC" {
-//            displayLabel.text = "0"
-//        }
-//        
-//        if sender.currentTitle == "%" {
-//            
-//            displayLabel.text = String(numberOnDisplay / 100)
-//        }
+        guard let numberOnDisplay = Double(displayLabel.text!) else {
+            fatalError("couldn't convert display label string to Double")
+        }
         
-        storedValue = ""
-    
+        func calculation () {
+            switch storedAction {
+            case "+":
+                storedNumber! += numberOnDisplay
+            case "-":
+                storedNumber! -= numberOnDisplay
+            case "×":
+                storedNumber! *= numberOnDisplay
+            case "÷":
+                storedNumber! /= numberOnDisplay
+            default:
+                displayLabel.text = "0.0"
+            }
+        }
+
+        if sender.currentTitle == "=" {
+            calculation()
+        }
+        
+        storedAction = sender.currentTitle
+        
+        if storedNumber == nil {
+            storedNumber = numberOnDisplay
+        } else {
+            calculation()
+        }
+        //unwrapping the optional to put in the label
+        if let storedNumber = storedNumber {
+            displayLabel.text = String(storedNumber)
+        }
+        
+        if sender.currentTitle == "%" {
+            displayLabel.text = String(numberOnDisplay / 100)
+        } else if sender.currentTitle == "+/-" {
+            displayLabel.text = String(numberOnDisplay * -1)
+        } else if sender.currentTitle == "AC" {
+            displayLabel.text = "0.0"
+            storedAction = nil
+            storedNumber = nil
+        }
     }
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
         
-        if (sender.currentTitle == "." && storedValue.contains("."))  {
+        if (sender.currentTitle == "." && typedNumber.contains("."))  {
             return
-            
         }
         
         if let numValue = sender.currentTitle {
-
-            displayLabel.text = storedValue + numValue
-            storedValue.append(numValue)
-
-
+            displayLabel.text = typedNumber + numValue
+            typedNumber.append(numValue)
         }
     
     }
