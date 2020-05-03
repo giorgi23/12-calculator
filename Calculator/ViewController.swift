@@ -10,31 +10,33 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let calculatorBrain = CalculatorBrain()
+    
     private var storedValue : String = ""
     
     @IBOutlet weak var displayLabel: UILabel!
     
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
+        displayLabel.text =  calculatorBrain.calculate(button: sender.currentTitle, displayText: displayLabel.text!)
         
-        
-        guard let numberOnDisplay = Double(displayLabel.text!) else {
-            fatalError("couldn't convert display label string to Double")
-        }
-        
-        if sender.currentTitle == "+/-" {
-            
-            displayLabel.text = String(numberOnDisplay * -1)
-        }
-        
-        if sender.currentTitle == "AC" {
-            displayLabel.text = "0"
-        }
-        
-        if sender.currentTitle == "%" {
-            
-            displayLabel.text = String(numberOnDisplay / 100)
-        }
+//        guard let numberOnDisplay = Double(displayLabel.text!) else {
+//            fatalError("couldn't convert display label string to Double")
+//        }
+//        
+//        if sender.currentTitle == "+/-" {
+//            
+//            displayLabel.text = String(numberOnDisplay * -1)
+//        }
+//        
+//        if sender.currentTitle == "AC" {
+//            displayLabel.text = "0"
+//        }
+//        
+//        if sender.currentTitle == "%" {
+//            
+//            displayLabel.text = String(numberOnDisplay / 100)
+//        }
         
         storedValue = ""
     
